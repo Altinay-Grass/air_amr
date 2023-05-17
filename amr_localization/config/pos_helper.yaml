@@ -1,0 +1,4 @@
+position_helper:
+ timer_interval: 5.0
+ position_sub_topic: "/amcl_pose"
+ path_to_position_storage_file: "/home/ubuntu/catkin_ws/src/amr_localization/pos_storage.yaml"

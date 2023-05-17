@@ -1,0 +1,6 @@
+nav_points:
+  -
+   point_name: "point_1"
+   c_x: 1.0
+   c_y: 1.0
+   c_w: 2.0

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+    <arg name="use_gmapping" default="true"></arg>
+    <arg name="use_hector" default="false"></arg>
+    
+    <param
+        name="robot_description"
+        textfile="$(find amr_description)/urdf/amr_simply.urdf"
+    />
+    <node
+    name="robot_state_publisher"
+    pkg="robot_state_publisher"
+    type="robot_state_publisher"
+    respawn="false"
+    output="screen"
+    >
+    <param name="publish_frequency" value="50.0"></param>
+    </node>
+
+    <node name="urg_node" pkg="urg_node" type="urg_node" output="screen">
+      <param name="ip_address" value=""/>
+      <param name="serial_port" value="/dev/ttyACM0"/>
+      <param name="serial_baud" value="115200"/>
+      <param name="frame_id" value="hokuyo_link"/>
+      <param name="calibrate_time" value="true"/>
+      <param name="publish_intensity" value="false"/>
+      <param name="publish_multiecho" value="false"/>
+      <!-- <param name="angle_min" value="-1.5707963"/>
+      <param name="angle_max" value="1.5707963"/> -->
+      <param name="angle_min" value="-2.0943951"/>
+      <param name="angle_max" value="2.0943951"/>
+    </node>
+
+<!--     <node
+    name="joint_state_publisher"
+    pkg="joint_state_publisher"
+    type="joint_state_publisher" /> -->
+
+    <include file="$(find amr_hardware_interface)/launch/controller_hardware_interface.launch"></include>
+    
+
+    <group if="$(eval arg('use_gmapping') == true)">
+        <include 
+            file="$(find amr_control)/launch/amr_control.launch">
+            <arg name="provide_odom_tf" value="true"></arg>    
+        </include>
+        <include file="$(find amr_mapping)/launch/amr_gmapping.launch"></include>
+    </group>
+    <group if="$(eval arg('use_hector') == true)">
+        <include 
+            file="$(find amr_control)/launch/amr_control.launch">
+            <arg name="provide_odom_tf" value="false"></arg>    
+        </include>
+        <include file="$(find amr_mapping)/launch/hector_mapping.launch"></include>
+    </group>
+    <!-- <include file="$(find amr_localization)/launch/amr_localization.launch"></include> -->
+    <!-- <include file="$(find amr_mapping)/launch/amr_mapping.launch"></include> -->
+    <!-- <include file="$(find amr_localization)/launch/amr_amcl.launch"></include> -->
+    <!-- <include file="$(find realsense-ros)/launch/opensource_tracking.launch"></include> -->
+    <include file="$(find amr_navigation)/launch/amr_navigation.launch"></include>
+
+    <node
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+    args="-d $(find amr_bringup)/rviz/amr.rviz" />
+
+</launch>

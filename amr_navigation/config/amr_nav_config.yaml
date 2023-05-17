@@ -1,0 +1,2 @@
+amr_nav_config:
+ path_to_points_file: "/home/naci/air_repo/src/amr_navigation/config/amr_nav_points.yaml"
