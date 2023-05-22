@@ -2,8 +2,21 @@
 
 <launch>
 
-    <arg name="use_gmapping" default="true"></arg>
+    <arg name="use_gmapping" default="false"></arg>
     <arg name="use_hector" default="false"></arg>
+    <arg name="use_amcl" default="false"></arg>
+    <arg name="use_als" default="false"></arg>
+
+    <arg name="use_slam_toolbox" default="false"></arg>
+    <arg name="mode" default="lifelong"></arg>
+
+<!--     <arg name="lifelong" default="false"></arg>
+    <arg name="localization" default="false"></arg>
+    <arg name="offline" default="false"></arg>
+    <arg name="online_async" default="false"></arg>
+    <arg name="online_sync" default="false"></arg> -->
+
+    <arg name="map_file" default="$(find amr_mapping)/maps/altinaygrass.yaml"></arg>
     
     <param
         name="robot_description"
@@ -16,7 +29,7 @@
     respawn="false"
     output="screen"
     >
-    <param name="publish_frequency" value="50.0"></param>
+    <param name="publish_frequency" value="100.0"></param>
     </node>
 
     <node name="urg_node" pkg="urg_node" type="urg_node" output="screen">
@@ -41,25 +54,53 @@
     <include file="$(find amr_hardware_interface)/launch/controller_hardware_interface.launch"></include>
     
 
-    <group if="$(eval arg('use_gmapping') == true)">
+    <group if="$(arg use_gmapping)">
         <include 
             file="$(find amr_control)/launch/amr_control.launch">
             <arg name="provide_odom_tf" value="true"></arg>    
         </include>
         <include file="$(find amr_mapping)/launch/amr_gmapping.launch"></include>
+        <include file="$(find amr_navigation)/launch/amr_navigation.launch"></include>
     </group>
-    <group if="$(eval arg('use_hector') == true)">
+    <group if="$(arg use_hector)">
         <include 
             file="$(find amr_control)/launch/amr_control.launch">
             <arg name="provide_odom_tf" value="false"></arg>    
         </include>
         <include file="$(find amr_mapping)/launch/hector_mapping.launch"></include>
+        <include file="$(find amr_navigation)/launch/amr_navigation.launch"></include>
+        
+    </group>
+    <group
+        if="$(arg use_amcl)"
+    >
+        <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"></node>
+        <include file="$(find amr_localization)/launch/amr_amcl.launch"></include>
+        <include 
+            file="$(find amr_control)/launch/amr_control.launch">
+        </include>
+            <arg name="provide_odom_tf" value="true"></arg>    
+        <include file="$(find amr_navigation)/launch/amr_navigation.launch"></include>
+        <!-- <include file="$(find amr_navigation)/launch/amr_nav_client.launch"/> -->
+    </group>
+    <group if="$(arg use_slam_toolbox)">
+        <include 
+            file="$(find amr_control)/launch/amr_control.launch">
+            <arg name="provide_odom_tf" value="true"></arg>    
+        </include>
+        <!-- <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"></node> -->
+        <include file="$(find amr_mapping)/launch/slam_toolbox.launch">
+        <arg name="$(arg mode)" value="true"></arg>
+        
+        </include>
+        
+        <include file="$(find amr_navigation)/launch/amr_navigation.launch"></include>
     </group>
     <!-- <include file="$(find amr_localization)/launch/amr_localization.launch"></include> -->
     <!-- <include file="$(find amr_mapping)/launch/amr_mapping.launch"></include> -->
     <!-- <include file="$(find amr_localization)/launch/amr_amcl.launch"></include> -->
     <!-- <include file="$(find realsense-ros)/launch/opensource_tracking.launch"></include> -->
-    <include file="$(find amr_navigation)/launch/amr_navigation.launch"></include>
+    
 
     <node
     name="rviz"

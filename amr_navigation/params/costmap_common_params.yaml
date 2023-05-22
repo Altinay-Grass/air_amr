@@ -5,8 +5,8 @@ footprint: [[-0.410, -0.305], [-0.410, 0.305], [0.410, 0.305], [0.410, -0.305]]
 
 #robot_radius: 0.105
 
-inflation_radius: 0.5
-cost_scaling_factor: 3.0
+inflation_radius: 1.75
+cost_scaling_factor: 2.58
 transform_tolerence: 1.0
 
 map_type: costmap

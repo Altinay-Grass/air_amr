@@ -35,7 +35,9 @@ void AmrEcController::cyclicTask()
         {
 
             auto leftMotorPosOpt = m_Master->read<int32_t>("amr_domain", "EL7221_9015_0", "current_position");
-            auto rightMotorPosOpt = m_Master->read<int32_t>("amr_domain", "EL7221_9015_0", "current_position");
+            auto rightMotorPosOpt = m_Master->read<int32_t>("amr_domain", "EL7221_9015_1", "current_position");
+
+            //std::cout << "From EC Left Pos: " << leftMotorPosOpt.value() << " Right Pos: " << rightMotorPosOpt.value() << std::endl;
 
             if(leftMotorPosOpt != std::nullopt && rightMotorPosOpt != std::nullopt)
             {
@@ -197,7 +199,7 @@ int main(int argc, char** argv)
 
         auto rawLeftPosOpt = hw.m_EthercatController->getData<int32_t>("EL7221_9015_0", "current_position");
         auto rawRightPosOpt = hw.m_EthercatController->getData<int32_t>("EL7221_9015_1", "current_position");
-        
+
         // Write to values to joints
         if(rawLeftPosOpt != std::nullopt && rawRightPosOpt != std::nullopt)
         {
@@ -212,10 +214,11 @@ int main(int argc, char** argv)
                 }
             }
             
-
+            //std::string rawPositionStr = "Left Pos: " + std::to_string(rawLeftPosOpt.value()) + " Right Pos:" + std::to_string(rawRightPosOpt.value());
+            //ROS_INFO(rawPositionStr.c_str());
             double leftPositionRad = amr::utils::motorPositionToWheelPositionRad(rawLeftPosOpt.value(), hw.m_PositionHelper) - hw.m_WheelHomingHelper.leftPosDiff;
             double rightPositionRad = amr::utils::motorPositionToWheelPositionRad(rawRightPosOpt.value(), hw.m_PositionHelper) - hw.m_WheelHomingHelper.rightPosDiff;
-
+            
             //std::cout << "Left Wheel Pos: " << rawLeftPosOpt.value() << " " << "Right Motor Pos: " << rawRightPosOpt.value() << std::endl;
 
             double leftVel = 0.0;
@@ -249,7 +252,7 @@ int main(int argc, char** argv)
 
         const std::pair<double, double> velCmds = hw.getTargetVelocities();
 
-        int32_t leftTargetVel = amr::utils::linearVelToDriverCmd(velCmds.first * -1.0, hw.m_DriverInfo);
+        int32_t leftTargetVel = amr::utils::linearVelToDriverCmd(velCmds.first, hw.m_DriverInfo) * (-1);
         int32_t rightTargetVel = amr::utils::linearVelToDriverCmd(velCmds.second, hw.m_DriverInfo);
 
         hw.m_EthercatController->setData("EL7221_9015_0", "target_velocity", leftTargetVel);
