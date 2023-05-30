@@ -46,7 +46,7 @@
     <visual>
       <origin
         xyz="0 0 0"
-        rpy="-1.5707963267949 0 0" />
+        rpy="0 0 0" />
       <geometry>
         <mesh
           filename="package://amr_description/meshes/lw_link.STL" />
@@ -61,13 +61,13 @@
     type="continuous">
       <origin
       xyz="0 0.225 0.1"
-      rpy="0 0 0" />
+      rpy="-1.5707963267949 0 0" />
     <parent
       link="base_link" />
     <child
       link="lw_link" />
     <axis
-      xyz="0 1 0" />
+      xyz="0 0 1" />
     <safety_controller
       k_velocity="0" />
   </joint>
@@ -76,7 +76,7 @@
     <visual>
       <origin
         xyz="0 0 0"
-        rpy="1.5707963267949 0 0" />
+        rpy="0 0 0" />
       <geometry>
         <mesh
           filename="package://amr_description/meshes/rw_link.STL" />
@@ -91,19 +91,19 @@
     type="continuous">
       <origin
       xyz="0 -0.225 0.1"
-      rpy="0 0 0" />
+      rpy="1.5707963267949 0 0" />
+    <axis xyz="0 0 -1" />
     <parent
       link="base_link" />
     <child
       link="rw_link" />
-    <axis
-      xyz="0 1 0" />
     <safety_controller
       k_velocity="0" />
   </joint>
 
   <joint name="hokuyo_joint" type="fixed">
-     <origin xyz="0.35 -0.28 0.09" rpy="0.0 0.0 -0.785"/>
+     <origin xyz="0.355 -0.275 0.09" rpy="0.0 0.0 -0.7854"/>
+     <axis xyz="0 0 1" />
     <parent link="base_link"/>
     <child link="hokuyo_link"/>
   </joint>

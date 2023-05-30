@@ -1,3 +1,5 @@
 .vscode/c_cpp_properties.json
 realsense-ros
+octomap_rviz_plugins
+.gitignore
 .vscode

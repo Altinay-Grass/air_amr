@@ -14,6 +14,7 @@
     />
     <group if="$(eval arg('provide_odom_tf') == true)">
         <param name="/amr/mobile_base_controller/enable_odom_tf" value="true"></param>
+        <!-- <remap from="/odom" to="/amr/mobile_base_controller/odom" /> -->
     </group>
     
     

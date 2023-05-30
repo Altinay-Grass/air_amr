@@ -16,8 +16,9 @@
     <arg name="online_async" default="false"></arg>
     <arg name="online_sync" default="false"></arg> -->
 
-    <arg name="map_file" default="$(find amr_mapping)/maps/altinaygrass.yaml"></arg>
-    
+    <!-- <arg name="map_file" default="$(find amr_mapping)/maps/altinaygrass.yaml"></arg> -->
+    <arg name="map_file" default="$(find amr_mapping)/maps/default.yaml"></arg>
+
     <param
         name="robot_description"
         textfile="$(find amr_description)/urdf/amr_simply.urdf"
@@ -37,13 +38,14 @@
       <param name="serial_port" value="/dev/ttyACM0"/>
       <param name="serial_baud" value="115200"/>
       <param name="frame_id" value="hokuyo_link"/>
+      <param name="skip" value="1"/>
       <param name="calibrate_time" value="true"/>
       <param name="publish_intensity" value="false"/>
       <param name="publish_multiecho" value="false"/>
       <!-- <param name="angle_min" value="-1.5707963"/>
       <param name="angle_max" value="1.5707963"/> -->
-      <param name="angle_min" value="-2.0943951"/>
-      <param name="angle_max" value="2.0943951"/>
+      <param name="angle_min" value="-2.6989"/>
+      <param name="angle_max" value="2.6989"/>
     </node>
 
 <!--     <node

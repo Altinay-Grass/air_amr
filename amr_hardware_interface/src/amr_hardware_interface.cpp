@@ -264,6 +264,9 @@ int main(int argc, char** argv)
         rate.sleep();
     }
 
+    hw.m_EthercatController->runEcThread = false;
+    
+
     ros::waitForShutdown();
     return 0;
 }
