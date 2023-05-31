@@ -1,6 +1,9 @@
 <launch>
 <node pkg="amcl" type="amcl" name="amcl" output="screen">
   <!-- Publish scans from best pose at a max of 10 Hz -->
+  <param name="initial_pose_x" value="8.6"/>
+  <param name="initial_pose_y" value="-13.15"/>
+  <param name="initial_pose_a" value="1.576"/>
   <param name="odom_model_type" value="diff"/>
   <param name="odom_alpha5" value="0.1"/>
   <param name="gui_publish_rate" value="-1.0"/>
